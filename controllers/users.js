@@ -13,11 +13,9 @@ module.exports.getCurrentUser = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Такого пользователя нет.');
       }
-      res.send(user)
-        .catch((err) => {
-          next(err);
-        });
-    });
+      res.send(user);
+    })
+    .catch(next);
 };
 
 module.exports.updateUserInfo = (req, res, next) => {
@@ -72,7 +70,7 @@ module.exports.createUser = (req, res, next) => {
       .send({ _id: user._id, name: user.name, email: user.email }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new BadRequestError('Переданы некорректные данные'));
+        next(new BadRequestError('Переданы некорректные данные.'));
       } else if (err.code === 11000) {
         next(new ConflictError('Такой e-mail уже занят.'));
       } else {

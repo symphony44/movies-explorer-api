@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const bodyparser = require('body-parser');
 const cors = require('cors');
@@ -8,12 +10,13 @@ const { errors } = require('celebrate');
 const middlewareError = require('./middlewares/error');
 const routes = require('./routes/index');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const limiter = require('./middlewares/rateLimiter');
 
 const app = express();
 
-const { PORT = 3000 } = process.env;
+const { PORT = 3000, NODE_ENV, DATA_BASE } = process.env;
 
-mongoose.connect('mongodb://localhost:27017/moviesdb', {
+mongoose.connect(`${NODE_ENV === 'production' ? DATA_BASE : 'mongodb://localhost:27017/moviesdb'}`, {
   useNewUrlParser: true,
 });
 
@@ -30,6 +33,7 @@ app.use(cors({
 }));
 
 app.use(helmet());
+app.use(limiter);
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use(cookieParser());

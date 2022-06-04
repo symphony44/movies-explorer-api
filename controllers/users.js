@@ -45,6 +45,8 @@ module.exports.login = (req, res, next) => {
       res.cookie('jwt', token, {
         maxAge: 3600000 * 24 * 7,
         httpOnly: true,
+        sameSite: 'None',
+        secure: true,
       })
         .send({ message: 'Вы авторизованы.' })
         .end();
@@ -55,13 +57,13 @@ module.exports.login = (req, res, next) => {
 module.exports.checkIsLogin = (req, res) => {
   const token = req.cookies.jwt;
 
-  if(!token) {
+  if (!token) {
     res.send({ isLogin: false });
   } else {
     let check;
     try {
       check = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : 'some-secret-key');
-    } catch {
+    } catch (err) {
       res.send({ isLogin: false });
     }
     if (check) {
@@ -73,6 +75,8 @@ module.exports.checkIsLogin = (req, res) => {
 module.exports.signout = (req, res) => {
   res.clearCookie('jwt', {
     httpOnly: true,
+    sameSite: 'None',
+    secure: true,
   })
     .send({ message: 'Cookie удалены.' });
 };

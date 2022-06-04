@@ -24,7 +24,8 @@ app.use(cors({
   origin: [
     'localhost:3000',
     'http://localhost:3000',
-    'symphony44diploma.nomoredomains.work',
+    'http://symphony44diplomaweb.nomoredomains.xyz',
+    'https://symphony44diplomaweb.nomoredomains.xyz',
     'http://localhost:3050',
     'localhost:3050',
   ],

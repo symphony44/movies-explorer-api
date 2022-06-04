@@ -52,6 +52,24 @@ module.exports.login = (req, res, next) => {
     .catch(next);
 };
 
+module.exports.checkIsLogin = (req, res) => {
+  const token = req.cookies.jwt;
+
+  if(!token) {
+    res.send({ isLogin: false });
+  } else {
+    let check;
+    try {
+      check = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : 'some-secret-key');
+    } catch {
+      res.send({ isLogin: false });
+    }
+    if (check) {
+      res.send({ isLogin: true });
+    }
+  }
+};
+
 module.exports.signout = (req, res) => {
   res.clearCookie('jwt', {
     httpOnly: true,

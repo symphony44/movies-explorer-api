@@ -25,6 +25,8 @@ app.use(cors({
     'localhost:3000',
     'http://localhost:3000',
     'symphony44diploma.nomoredomains.work',
+    'http://localhost:3050',
+    'localhost:3050',
   ],
   methods: 'GET, POST, PATCH, DELETE',
   allowedHeaders: 'Content-Type, Authorization, Origin, Accept',
